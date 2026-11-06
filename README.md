@@ -3,6 +3,8 @@
 An optimized recreation of Mio 2.4.4 for Minecraft 1.21.11.
 ![zio](https://raw.githubusercontent.com/minecraftlover74/open-zio/refs/heads/main/zio.png)
 
+[![YOUTUBE](https://img.youtube.com/vi/2k92c_UstgY/0.jpg)](https://www.youtube.com/watch?v=2k92c_UstgY)
+
 # Discord
 Never miss our projects again: https://discord.com/invite/W2cEqSf8eK
 
