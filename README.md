@@ -2,10 +2,8 @@
 
 An optimized recreation of Mio 2.4.4 for Minecraft 1.21.11.
 
-# Compatibility
-
-- Open Zio works on all desktop platforms without exceptions. 
-- This is possible due to the lack of a limited capabilities turboloader implementation.
+# Discord
+Never miss our projects again: https://discord.com/invite/W2cEqSf8eK
 
 # Issues & Contributing
 
