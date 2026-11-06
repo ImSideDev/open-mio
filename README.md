@@ -1,5 +1,7 @@
 # Open Zio
 
+![zio](https://raw.githubusercontent.com/minecraftlover74/open-zio/refs/heads/main/zio.png)
+
 An optimized recreation of Mio 2.4.4 for Minecraft 1.21.11.
 
 # Discord
