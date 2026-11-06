@@ -14,6 +14,7 @@ import dev.zio.client.ClientContext;
 import dev.zio.client.ZioClient;
 import dev.zio.client.events.ClientInitializationEvent;
 import dev.zio.client.integrations.baritone.BaritoneAdapter;
+import dev.zio.client.integrations.baritone.DisabledBaritoneBridge;
 import dev.zio.client.integrations.xaero.DisabledWaypointAdapter;
 import dev.zio.client.managers.AliasRegistry;
 import dev.zio.client.managers.AutoPresetRegistry;
@@ -68,7 +69,8 @@ public final class ClientInitializer {
          return;
       }
       // Constructors publish services in dependency order before modules bind to them.
-      ClientContext.baritoneBridge = new BaritoneAdapter();
+      ClientContext.baritoneBridge = FabricLoader.getInstance().isModLoaded("baritone-meteor")
+         ? new BaritoneAdapter() : new DisabledBaritoneBridge();
       ClientContext.waypointAdapter = new DisabledWaypointAdapter();
       FontSupport.initialize();
       ClientContext.languageTable = new LanguageTable();

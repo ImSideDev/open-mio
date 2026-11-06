@@ -23,9 +23,16 @@
     "fabricloader": ">=0.19.5",
     "minecraft": "1.21.11",
     "java": ">=21",
-    "fabric-api": "*",
+    "fabric-api": "*"
+  },
+  "suggests": {
     "baritone-meteor": "1.21.11-SNAPSHOT",
-    "viafabricplus": "4.4.9"
+    "viafabricplus": "4.4.9",
+    "entityculling": "*",
+    "sodium": "*",
+    "lithium": "*",
+    "immediatelyfast": "*",
+    "xaerominimap": "*"
   },
   "mixins": [
     "zio.mixins.json"

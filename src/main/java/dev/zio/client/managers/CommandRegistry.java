@@ -66,9 +66,7 @@ public final class CommandRegistry extends Registry<Command> implements ClientAc
    }
 
    private void registerPathfindingCommand() {
-      if (ClientContext.baritoneBridge.isAvailable()) {
-         this.registerCommand(new BaritoneCommand());
-      }
+      this.registerCommand(new BaritoneCommand());
    }
 
    public CommandRegistry() {

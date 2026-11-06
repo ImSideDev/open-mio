@@ -56,9 +56,9 @@ public final class ModuleRegistry extends Registry<Module> implements ClientAcce
 
    private void registerPathfindingModules() {
       BaritoneBridge bridge = ClientContext.baritoneBridge;
+      BaritoneModule baritoneModule = new BaritoneModule();
+      this.registerModule(baritoneModule);
       if (bridge.isAvailable()) {
-         BaritoneModule baritoneModule = new BaritoneModule();
-         this.registerModule(baritoneModule);
          ObstaclePasserModule obstaclePasserModule = new ObstaclePasserModule();
          this.registerModule(obstaclePasserModule);
       }

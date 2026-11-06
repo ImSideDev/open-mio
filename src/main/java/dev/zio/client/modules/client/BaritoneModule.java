@@ -55,16 +55,7 @@ public class BaritoneModule extends PermanentModule {
 
    private List<AssumedSetting> getAssumedSettings() {
       if (this.assumedSettings == null) {
-         BaritoneModule.AssumedSetting stepAssumption = new BaritoneModule.AssumedSetting(
-            settings -> settings.assumeStep, step::isToggled
-         );
-         BaritoneModule.AssumedSetting autoToolAssumption = new BaritoneModule.AssumedSetting(
-            settings -> settings.assumeExternalAutoTool, autoTool::isToggled
-         );
-         BaritoneModule.AssumedSetting safeWalkAssumption = new BaritoneModule.AssumedSetting(
-            settings -> settings.assumeSafeWalk, safeWalk::isToggled
-         );
-         this.assumedSettings = List.of(stepAssumption, autoToolAssumption, safeWalkAssumption);
+         this.assumedSettings = AssumedSetting.create(step, autoTool, safeWalk);
       }
 
       return this.assumedSettings;
@@ -72,6 +63,9 @@ public class BaritoneModule extends PermanentModule {
 
    @EventHandler
    private void onMinecraftTick(MinecraftTickEvent event) {
+      if (!ClientContext.baritoneBridge.isAvailable()) {
+         return;
+      }
       Settings settings = BaritoneAPI.getSettings();
 
       Settings.Setting targetSetting = settings.disconnectOnArrival;
@@ -149,8 +143,10 @@ public class BaritoneModule extends PermanentModule {
       this.replaceColorsSetting = this.add(replaceColorsSetting);
       this.colorSetting = this.add(new ColorSetting(("Color"), new Color(-4351489, true)).dependsOn(this.replaceColorsSetting));
       this.goalSetting = this.add(new ColorSetting("Goal", new Color(-4351489, true)).dependsOn(this.replaceColorsSetting));
-      Settings.Setting chatControlSetting = BaritoneAPI.getSettings().chatControl;
-      chatControlSetting.value = (false);
+      if (ClientContext.baritoneBridge.isAvailable()) {
+         Settings.Setting chatControlSetting = BaritoneAPI.getSettings().chatControl;
+         chatControlSetting.value = false;
+      }
       EventBus eventBus = ClientAccess.eventBus;
       eventBus.subscribe(this);
    }
@@ -159,6 +155,14 @@ public class BaritoneModule extends PermanentModule {
       private final Function<Settings, Settings.Setting<Boolean>> settingSelector;
       private final Supplier<Boolean> moduleEnabled;
       private boolean lastEnabledValue;
+
+      private static List<AssumedSetting> create(StepModule step, AutoToolModule autoTool, SafeWalkModule safeWalk) {
+         return List.of(
+            new AssumedSetting(settings -> settings.assumeStep, step::isToggled),
+            new AssumedSetting(settings -> settings.assumeExternalAutoTool, autoTool::isToggled),
+            new AssumedSetting(settings -> settings.assumeSafeWalk, safeWalk::isToggled)
+         );
+      }
 
       private AssumedSetting(Function<Settings, Settings.Setting<Boolean>> settingSelector, Supplier<Boolean> moduleEnabled) {
          this.settingSelector = settingSelector;

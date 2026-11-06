@@ -10,6 +10,7 @@
 package dev.zio.client.commands;
 
 import dev.zio.client.utils.chat.ChatUtils;
+import dev.zio.client.ClientContext;
 import net.minecraft.network.chat.Component;
 
 import baritone.api.BaritoneAPI;
@@ -41,6 +42,10 @@ public class WaypointWalkCommand extends Command {
       };
       RequiredArgumentBuilder suggestedNameBuilder = nameBuilder.suggests(suggestions);
       com.mojang.brigadier.Command<Object> executor = context -> {
+         if (!ClientContext.baritoneBridge.isAvailable()) {
+            ChatUtils.printChat(Component.literal("Baritone is not installed."), ChatUtils.DEFAULT_SIGNATURE);
+            return 0;
+         }
 
          Vec3 waypoint = WaypointsCommand.resolveWaypointPosition(context);
          if (waypoint == null) {

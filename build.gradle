@@ -50,7 +50,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
-    modImplementation 'maven.modrinth:viafabricplus:YzQYJEjP'
+    modCompileOnly 'maven.modrinth:viafabricplus:YzQYJEjP'
+    modLocalRuntime 'maven.modrinth:viafabricplus:YzQYJEjP'
     modCompileOnly 'maven.modrinth:lithium:Ow7wA0kG'
     modCompileOnly 'maven.modrinth:immediatelyfast:QwkfUKSj'
     modCompileOnly 'maven.modrinth:sodium:RB7CDjTS'
@@ -64,7 +65,8 @@ dependencies {
     viaDistribution 'maven.modrinth:viafabricplus:YzQYJEjP'
     entityCullingDistribution 'maven.modrinth:entityculling:CTabrwB1'
 
-    modImplementation files(baritone)
+    modCompileOnly files(baritone)
+    modLocalRuntime files(baritone)
     implementation nestedLibraries(configurations.baritoneDistribution) {
         include 'META-INF/jars/*.jar'
     }
@@ -73,7 +75,7 @@ dependencies {
         exclude 'META-INF/jars/fabric-*.jar', 'META-INF/jars/gson-2*.jar',
             'META-INF/jars/viafabricplus-*.jar'
     }
-    modImplementation nestedLibraries(configurations.viaDistribution) {
+    modCompileOnly nestedLibraries(configurations.viaDistribution) {
         include 'META-INF/jars/viafabricplus-*.jar'
     }
     modLocalRuntime nestedLibraries(configurations.entityCullingDistribution) {

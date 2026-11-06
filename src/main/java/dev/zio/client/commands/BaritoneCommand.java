@@ -13,6 +13,8 @@ import dev.zio.client.ClientAccess;
 import dev.zio.client.ClientContext;
 import dev.zio.client.integrations.baritone.BaritoneBridge;
 import dev.zio.client.utils.world.WorldUtils;
+import dev.zio.client.utils.chat.ChatUtils;
+import net.minecraft.network.chat.Component;
 
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
@@ -53,6 +55,9 @@ public final class BaritoneCommand extends Command {
       StringArgumentType argumentType = StringArgumentType.greedyString();
       RequiredArgumentBuilder commandArgument = Command.argument("command", argumentType);
       SuggestionProvider<Object> suggestionProvider = (context, builder) -> {
+         if (!ClientContext.baritoneBridge.isAvailable()) {
+            return builder.buildFuture();
+         }
          IBaritoneProvider provider = BaritoneAPI.getProvider();
          IBaritone baritone = provider.getPrimaryBaritone();
          String completionInput = COMPLETION_PREFIX;
@@ -91,6 +96,10 @@ public final class BaritoneCommand extends Command {
       };
       commandArgument = commandArgument.suggests(suggestionProvider);
       com.mojang.brigadier.Command<Object> commandAction = context -> {
+         if (!ClientContext.baritoneBridge.isAvailable()) {
+            ChatUtils.printChat(Component.literal("Baritone is not installed."), ChatUtils.DEFAULT_SIGNATURE);
+            return 0;
+         }
          IBaritoneProvider provider = BaritoneAPI.getProvider();
          IBaritone baritone = provider.getPrimaryBaritone();
 

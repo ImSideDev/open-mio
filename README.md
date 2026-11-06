@@ -35,3 +35,5 @@ or for Windows:
 ```
 
 - Build artifact can be found in builds/libs/
+
+Fabric Loader and Fabric API are required. Baritone Meteor for Minecraft 1.21.11 (pathfinding) and ViaFabricPlus 4.4.9 (other protocol versions) are optional and are not bundled. Development runs include both integrations.

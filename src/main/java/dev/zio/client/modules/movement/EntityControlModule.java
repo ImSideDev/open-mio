@@ -10,6 +10,7 @@
 package dev.zio.client.modules.movement;
 
 import dev.zio.client.ClientAccess;
+import dev.zio.client.ClientContext;
 import dev.zio.client.events.VehicleMoveEvent;
 import dev.zio.client.events.LocalPlayerPreTickEvent;
 import dev.zio.client.events.MinecraftDisconnectEvent;
@@ -26,6 +27,7 @@ import dev.zio.client.settings.NumberSetting;
 import dev.zio.client.settings.Setting;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
@@ -50,7 +52,7 @@ public class EntityControlModule extends Module {
    private boolean useNegativeFlightJitter;
    private long accelerationStartMillis;
    private volatile boolean grimOverflowActive;
-   private final EntityControlPathfinder pathfinder;
+   private final Supplier<Vec3> pathfinderMotion;
 
    public EntityControlModule() {
       super("EntityControl", "Helps with riding entities.", ModuleCategory.MOVEMENT, new String[0]);
@@ -63,6 +65,7 @@ public class EntityControlModule extends Module {
       Predicate<Object> noCollisionVisibility = ignored -> this.entitySpeedSetting.isExpanded();
       this.noCollisionSetting = this.add(new BooleanSetting("NoCollision", true, noCollisionVisibility));
       this.pathFinderSetting = this.add(new BooleanSetting("Baritone", false).dependsOn(this.entitySpeedSetting));
+      this.pathFinderSetting.hideWithoutBaritone();
       Predicate<Object> glideVisibility = ignored -> this.entitySpeedSetting.isExpanded();
       this.glideSetting = this.add(new BooleanSetting("Glide", false, glideVisibility));
       Predicate<Object> accelerateVisibility = ignored -> this.entitySpeedSetting.isExpanded();
@@ -71,7 +74,7 @@ public class EntityControlModule extends Module {
       this.flightSetting = this.add(new BooleanSetting("Flight", false, flightVisibility).markVisibilityDependency());
       this.verticalSetting = this.add(new NumberSetting<>("Vertical", 10.0F, 0.0F, 20.0F).dependsOn(this.flightSetting, this.entitySpeedSetting));
       this.speedSetting.setChangeCallback(() -> this.accelerationStartMillis = System.currentTimeMillis());
-      this.pathfinder = new EntityControlPathfinder(this);
+      this.pathfinderMotion = ClientContext.baritoneBridge.isAvailable() ? new EntityControlPathfinder(this)::getMotion : null;
    }
 
    @Override
@@ -111,7 +114,7 @@ public class EntityControlModule extends Module {
             this.speedSetting.getValue(), 0.1D, this.speedSetting.getValue(), this.accelerationStartMillis
          );
       }
-      Vec3 pathMotion = this.pathfinder.getMotion();
+      Vec3 pathMotion = this.pathfinderMotion == null ? null : this.pathfinderMotion.get();
       if (!this.entitySpeedSetting.getValue() || pathMotion == null && this.shouldPauseVehicleSpeed()) {
          return;
       }
