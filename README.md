@@ -1,4 +1,4 @@
-# Open Zio
+# Open Mio
 
 An optimized recreation of Mio 2.4.4 for Minecraft 1.21.11.
 ![zio](https://raw.githubusercontent.com/minecraftlover74/open-zio/refs/heads/main/zio.png)
